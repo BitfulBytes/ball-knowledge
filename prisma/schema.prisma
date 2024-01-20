@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model careerSpells {
+  id           String       @id
+  clubId       String
+  from         String?
+  until        String?
+  apps         Int?
+  goals        Int?
+  loan         Boolean
+  playingLevel PlayingLevel
+  playerId     String
+  clubs        clubs        @relation(fields: [clubId], references: [id])
+  players      players      @relation(fields: [playerId], references: [id])
+}
+
+model clubs {
+  id           String         @id
+  name         String
+  wikipediaUrl String
+  imageUrl     String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime
+  careerSpells careerSpells[]
+
+  @@unique([name, wikipediaUrl])
+}
+
+model players {
+  id           String         @id
+  name         String
+  fullName     String?
+  wikipediaUrl String
+  imageUrl     String
+  dateOfBirth  String?
+  placeOfBirth String?
+  height       String?
+  position     String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime
+  careerSpells careerSpells[]
+
+  @@unique([name, wikipediaUrl])
+}
+
+enum PlayingLevel {
+  YOUTH
+  SENIOR
+  INTERNATIONAL
+}
