@@ -7,8 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model careerSpells {
-  id           String       @id
+model CareerSpells {
+  id           String       @id @default(uuid())
   clubId       String
   from         String?
   until        String?
@@ -17,24 +17,24 @@ model careerSpells {
   loan         Boolean
   playingLevel PlayingLevel
   playerId     String
-  clubs        clubs        @relation(fields: [clubId], references: [id])
-  players      players      @relation(fields: [playerId], references: [id])
+  clubs        Clubs        @relation(fields: [clubId], references: [id])
+  players      Players      @relation(fields: [playerId], references: [id])
 }
 
-model clubs {
-  id           String         @id
+model Clubs {
+  id           String         @id @default(uuid())
   name         String
   wikipediaUrl String
   imageUrl     String?
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime
-  careerSpells careerSpells[]
+  updatedAt    DateTime       @updatedAt
+  careerSpells CareerSpells[]
 
   @@unique([name, wikipediaUrl])
 }
 
-model players {
-  id           String         @id
+model Players {
+  id           String         @id @default(uuid())
   name         String
   fullName     String?
   wikipediaUrl String
@@ -44,8 +44,8 @@ model players {
   height       String?
   position     String?
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime
-  careerSpells careerSpells[]
+  updatedAt    DateTime       @updatedAt 
+  careerSpells CareerSpells[]
 
   @@unique([name, wikipediaUrl])
 }
