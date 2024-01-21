@@ -21,7 +21,7 @@ const removeParenthesisedText = (text: string) => {
 
 const storeClubDetails = async (clubName: string, clubUrl?: string) => {
   try {
-    const club = await prisma.clubs.create({
+    const club = await prisma.club.create({
       data: {
         name: clubName,
         // Defaulting to empty string instead to allow wikipediaUrl to be used as part of a DB unique constraint
@@ -83,10 +83,7 @@ const getPlayerDetails = async (playerUrl: string) => {
 
         return playerDetails;
       },
-      {} as Omit<
-        Prisma.PlayersCreateInput,
-        'name' | 'wikipediaUrl' | 'imageUrl'
-      >
+      {} as Omit<Prisma.PlayerCreateInput, 'name' | 'wikipediaUrl' | 'imageUrl'>
     );
 
     if (!playerImage || !playerName) {
@@ -229,7 +226,7 @@ const getPlayerDetails = async (playerUrl: string) => {
     );
 
     console.log(`ℹ️ Creating DB entries for ${playerName}`);
-    await prisma.players.create({
+    await prisma.player.create({
       data: {
         ...playerDetails,
         name: playerName,

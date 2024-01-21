@@ -1,14 +1,18 @@
-import { $Enums, CareerSpells, Clubs } from '@prisma/client';
+import {
+  $Enums,
+  CareerSpell as PrismaCareerSpell,
+  Club as PrismaClub,
+} from '@prisma/client';
 
 import AnswerBlocks from '@/components/AnswerBlocks';
 import prisma from '@/lib/prisma';
 
-type CareerSpell = Omit<CareerSpells, 'clubId' | 'playerId'> & {
-  clubs: Pick<Clubs, 'id' | 'name' | 'wikipediaUrl'>;
+type CareerSpell = Omit<PrismaCareerSpell, 'clubId' | 'playerId'> & {
+  clubs: Pick<PrismaClub, 'id' | 'name' | 'wikipediaUrl'>;
 };
 
 const Home = async () => {
-  const player = await prisma.players.findFirst({
+  const player = await prisma.player.findFirst({
     select: {
       id: true,
       name: true,

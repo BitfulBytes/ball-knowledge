@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model CareerSpells {
+model CareerSpell {
   id           String       @id @default(uuid())
   clubId       String
   from         String?
@@ -17,23 +17,26 @@ model CareerSpells {
   loan         Boolean
   playingLevel PlayingLevel
   playerId     String
-  clubs        Clubs        @relation(fields: [clubId], references: [id])
-  players      Players      @relation(fields: [playerId], references: [id])
+  clubs        Club        @relation(fields: [clubId], references: [id])
+  players      Player      @relation(fields: [playerId], references: [id])
+
+  @@map("career_spells")
 }
 
-model Clubs {
+model Club {
   id           String         @id @default(uuid())
   name         String
   wikipediaUrl String
   imageUrl     String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  careerSpells CareerSpells[]
+  careerSpells CareerSpell[]
 
+  @@map("clubs")
   @@unique([name, wikipediaUrl])
 }
 
-model Players {
+model Player {
   id           String         @id @default(uuid())
   name         String
   fullName     String?
@@ -45,8 +48,9 @@ model Players {
   position     String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt 
-  careerSpells CareerSpells[]
+  careerSpells CareerSpell[]
 
+  @@map("players") 
   @@unique([name, wikipediaUrl])
 }
 
